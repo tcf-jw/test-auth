@@ -4,16 +4,16 @@ import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { graphRequest } from "../authConfig";
 import { SHARE_URL } from "../config";
 import { getDownloadUrl, fetchArrayBuffer } from "../graph";
-import { parseParquet, type ParsedParquet } from "../parquet";
+import { parseFile, type ParsedData } from "../data";
 import { Header } from "./Header";
-import { DataTable } from "./DataTable";
+import { DataWorkbook } from "./DataWorkbook";
 
 type Status = "loading" | "ready" | "error";
 
 export function DataView() {
   const { instance, accounts } = useMsal();
   const [status, setStatus] = useState<Status>("loading");
-  const [data, setData] = useState<ParsedParquet | null>(null);
+  const [data, setData] = useState<ParsedData | null>(null);
   const [error, setError] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
 
@@ -35,7 +35,7 @@ export function DataView() {
 
         const downloadUrl = await getDownloadUrl(tokenResp.accessToken, SHARE_URL);
         const buffer = await fetchArrayBuffer(downloadUrl);
-        const parsed = await parseParquet(buffer);
+        const parsed = await parseFile(buffer);
 
         if (!cancelled) {
           setData(parsed);
@@ -87,9 +87,7 @@ export function DataView() {
         </CenteredState>
       )}
 
-      {status === "ready" && data && (
-        <DataTable columns={data.columns} rows={data.rows} />
-      )}
+      {status === "ready" && data && <DataWorkbook data={data} />}
     </div>
   );
 }

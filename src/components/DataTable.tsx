@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { type Row, formatCell } from "../parquet";
+import { type Row, formatCell } from "../data";
 
 export function DataTable({
   columns,
@@ -59,7 +59,7 @@ export function DataTable({
   const filteredCount = table.getFilteredRowModel().rows.length;
 
   return (
-    <div className="mx-auto max-w-screen-2xl px-6 py-6">
+    <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-slate-900">Project Data</h2>

@@ -1,16 +1,19 @@
 # TopCut Analytics — Project Data viewer
 
-Single-page app that loads a parquet file from SharePoint via Microsoft Graph
-and renders it as a polished, sortable/filterable table. Microsoft Entra
-(Azure AD) sign-in is required before any data is fetched.
+Single-page app that loads a data file (**parquet or Excel**) from SharePoint
+via Microsoft Graph and renders it as a polished, sortable/filterable table.
+Microsoft Entra (Azure AD) sign-in is required before any data is fetched.
 
 - **Vite + React + TypeScript** (strict)
 - **Auth:** `@azure/msal-browser` + `@azure/msal-react` — auth code + PKCE,
   public client, **no client secret**, single tenant, redirect flow
 - **Data:** Microsoft Graph `/shares` → `@microsoft.graph.downloadUrl` →
-  raw parquet bytes, parsed in-browser with [`hyparquet`](https://github.com/hyparam/hyparquet)
-  (+ `hyparquet-compressors` for gzip/brotli/zstd)
-- **Table:** TanStack Table + Tailwind CSS v4
+  raw bytes, parsed in-browser. Format is auto-detected from magic bytes:
+  - **parquet** → [`hyparquet`](https://github.com/hyparam/hyparquet)
+    (+ `hyparquet-compressors` for gzip/brotli/zstd)
+  - **xlsx** → [SheetJS](https://sheetjs.com) (`xlsx`, patched build from the
+    SheetJS CDN); every worksheet/tab is parsed and selectable in the UI
+- **Table:** TanStack Table + Tailwind CSS v4 — multi-sheet tab bar for Excel
 
 Fetched data is kept **in memory only** — it is never written to the build output.
 
@@ -24,7 +27,8 @@ Fetched data is kept **in memory only** — it is never written to the build out
    `GET /v1.0/shares/{encoded}/driveItem`.
 4. The response's `@microsoft.graph.downloadUrl` (pre-authenticated,
    CORS-friendly) is fetched as an `ArrayBuffer`.
-5. `hyparquet` parses the bytes; schema → headers, rows → table.
+5. The bytes are sniffed: `PAR1` → parquet (schema → headers), `PK` → xlsx
+   (each sheet's first row → headers). Excel workbooks render one tab per sheet.
 
 ## Configuration
 
