@@ -24,6 +24,11 @@ export function DataView() {
       setStatus("loading");
       setError("");
       try {
+        if (!SHARE_URL) {
+          throw new Error(
+            "No data source configured. Set the VITE_SHARE_URL environment variable (repo variable in CI, .env locally)."
+          );
+        }
         const account = accounts[0];
         if (!account) throw new Error("No signed-in account.");
 

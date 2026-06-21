@@ -39,16 +39,17 @@ they live outside the source.
 | --- | --- |
 | `VITE_CLIENT_ID` | Entra app registration — Application (client) ID |
 | `VITE_TENANT_ID` | Directory (tenant) ID |
-| `VITE_SHARE_URL` | _(optional)_ overrides the default sharing URL |
+| `VITE_SHARE_URL` | **Required.** SharePoint sharing URL of the data file (no URL is committed to source) |
 | `VITE_REDIRECT_URI` | _(optional)_ overrides `origin + /test-auth/` |
 
-**Local dev:** copy `.env.example` → `.env`, fill in the two IDs, then
-`npm install && npm run dev`. The dev redirect URI is
-`http://localhost:5173/test-auth/` (register it too if you want to test locally).
+**Local dev:** copy `.env.example` → `.env`, fill in `VITE_CLIENT_ID`,
+`VITE_TENANT_ID`, and `VITE_SHARE_URL`, then `npm install && npm run dev`. The
+dev redirect URI is `http://localhost:5173/test-auth/` (register it too if you
+want to test locally).
 
-**CI / Pages:** the build workflow reads `VITE_CLIENT_ID` / `VITE_TENANT_ID`
-from **repository Variables** (Settings → Secrets and variables → Actions →
-Variables).
+**CI / Pages:** the build workflow reads `VITE_CLIENT_ID`, `VITE_TENANT_ID`, and
+`VITE_SHARE_URL` from **repository Variables** (Settings → Secrets and variables
+→ Actions → Variables).
 
 ## Deploy (GitHub Pages)
 
