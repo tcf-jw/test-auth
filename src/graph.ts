@@ -26,7 +26,13 @@ export async function getDownloadUrl(
 ): Promise<string> {
   const encoded = encodeShareUrl(shareUrl);
   const res = await fetch(`${GRAPH}/shares/${encoded}/driveItem`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      // SharePoint ":u:/s/...IQ..." links are *sharing links*; Graph rejects
+      // them with badArgument unless the sharing gesture is redeemed for the
+      // request. "IfNecessary" only redeems when required (no durable grant).
+      Prefer: "redeemSharingLinkIfNecessary",
+    },
   });
 
   if (!res.ok) {
