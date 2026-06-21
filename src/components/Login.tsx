@@ -47,6 +47,13 @@ export function Login() {
             {busy ? "Redirecting…" : "Sign in with Microsoft"}
           </button>
         )}
+
+        <a
+          href={`${import.meta.env.BASE_URL}?demo=1`}
+          className="mt-4 block text-center text-xs font-medium text-slate-400 underline-offset-2 hover:text-slate-600 hover:underline"
+        >
+          View a sample (no sign-in) →
+        </a>
       </div>
     </div>
   );
