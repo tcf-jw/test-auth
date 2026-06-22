@@ -1,4 +1,4 @@
-# TopCut Analytics — Project Data viewer
+# Project Data viewer
 
 Single-page app that loads a data file (**parquet or Excel**) from SharePoint
 via Microsoft Graph and renders it as a polished, sortable/filterable table.
